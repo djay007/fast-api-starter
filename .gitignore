@@ -1,0 +1,86 @@
+# Python
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables
+
+.env
+.env.*
+*.env
+
+# Logs
+
+*.log
+logs/
+
+# Coverage / Testing
+
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.cache/
+
+# Mypy
+
+.mypy_cache/
+
+# Pyre
+
+.pyre/
+
+# Ruff / Lint
+
+.ruff_cache/
+
+# Build
+
+build/
+dist/
+*.egg-info/
+
+# IDE
+
+.vscode/
+.idea/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Docker
+
+docker-compose.override.yml
+
+# Local database files
+
+*.sqlite3
+
+# Secrets
+
+secrets.json
+*.pem
+*.key
+
+# AWS
+
+.aws/
+
+# Node (if frontend added later)
+
+node_modules/
+
+# Temporary files
+
+*.tmp
+*.temp

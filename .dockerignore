@@ -1,0 +1,60 @@
+# Git
+
+.git
+.gitignore
+
+# Python cache
+
+**pycache**/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+
+venv/
+env/
+.venv/
+
+# Environment variables
+
+.env
+.env.*
+
+# Logs
+
+*.log
+
+# Test artifacts
+
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Build artifacts
+
+build/
+dist/
+*.egg-info/
+
+# IDE
+
+.vscode/
+.idea/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Local files
+
+*.sqlite3
+*.tmp
+*.temp
+
+# Documentation
+
+docs/
+README.md
