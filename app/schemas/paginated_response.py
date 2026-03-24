@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+from typing import Generic, TypeVar
+
 from pydantic import BaseModel
-from typing import Generic, TypeVar, List
 
 T = TypeVar("T")
 
 
 class PaginatedResponse(BaseModel, Generic[T]):
-    items: List[T]
+    items: list[T]
     total: int
     page: int
     size: int

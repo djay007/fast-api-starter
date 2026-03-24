@@ -1,7 +1,10 @@
+from __future__ import annotations
+
+import os
+
+from cryptography.fernet import Fernet
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-from cryptography.fernet import Fernet
-import os
 
 key = os.getenv("ENCRYPTION_KEY")
 fernet = Fernet(key) if key else None

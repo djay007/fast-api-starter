@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 from datetime import datetime
+
 from app.core.correlation import get_correlation_id
+
 
 def success_response(data):
     request_id = get_correlation_id()
@@ -9,6 +13,7 @@ def success_response(data):
         "timestamp": datetime.utcnow().isoformat(),
         "data": data,
     }
+
 
 def error_response(code, message):
     request_id = get_correlation_id()

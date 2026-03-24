@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
-from app.core.error_registry import ErrorCode
+
 from app.core.error_builder import build_error_response
+from app.core.error_registry import ErrorCode
 
 
 async def validation_exception_handler(
@@ -11,11 +14,13 @@ async def validation_exception_handler(
     formatted_errors = []
 
     for err in exc.errors():
-        formatted_errors.append({
-            "field": ".".join(map(str, err["loc"])),
-            "message": err["msg"],
-            "type": err["type"],
-        })
+        formatted_errors.append(
+            {
+                "field": ".".join(map(str, err["loc"])),
+                "message": err["msg"],
+                "type": err["type"],
+            }
+        )
 
     return build_error_response(
         request,

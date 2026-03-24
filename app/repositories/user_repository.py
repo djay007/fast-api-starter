@@ -1,5 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from __future__ import annotations
+
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.db.models.users import User
 
 
@@ -16,5 +19,5 @@ class UserRepository:
     async def create(self, db: AsyncSession, name: str, email: str):
         user = User(name=name, email=email)
         db.add(user)
-        await db.flush() 
+        await db.flush()
         return user

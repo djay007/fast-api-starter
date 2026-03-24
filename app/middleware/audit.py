@@ -1,7 +1,10 @@
-import uuid
+from __future__ import annotations
+
 import asyncio
+import uuid
 from datetime import datetime
-from starlette.types import ASGIApp, Scope, Receive, Send
+
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.config.config_manager import get_settings
 from app.infrastructure.audit_repository import save_audit_record
@@ -17,7 +20,7 @@ class AuditMiddleware:
             return
 
         settings = get_settings()
-        print ("AUDIT flag", settings.AUDIT_ENABLED)
+        print("AUDIT flag", settings.AUDIT_ENABLED)
         if not settings.AUDIT_ENABLED:
             await self.app(scope, receive, send)
             return

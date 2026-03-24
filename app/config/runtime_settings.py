@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import BaseModel
 
 
@@ -14,10 +16,10 @@ class Settings(BaseModel):
     DDB_TABLE: str
     S3_BUCKET: str
     DDB_URL: str
-    
+
     RATE_LIMIT_MAX: int
     RATE_LIMIT_WINDOW: int
 
-     # Audit
+    # Audit
     AUDIT_ENABLED: bool = True
     AUDIT_MAX_BODY_SIZE: int = 5000

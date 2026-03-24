@@ -1,7 +1,11 @@
+from __future__ import annotations
+
 import redis.asyncio as redis
+
 from app.config.bootstrap_settings import bootstrap_settings
 
 _redis_client = None
+
 
 def get_redis_client():
     global _redis_client

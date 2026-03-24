@@ -1,29 +1,24 @@
+from __future__ import annotations
+
 import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
-from contextlib import asynccontextmanager
-from sqlalchemy.exc import SQLAlchemyError
-from app.middleware.encryption import EncryptionMiddleware
-from app.middleware.auth import AuthMiddleware
-from app.middleware.rate_limit import RateLimitMiddleware
-from app.middleware.audit import AuditMiddleware
-from app.middleware.correlation_middleware import CorrelationIdMiddleware
 
+from app.config.config_manager import config_manager
+from app.core.exceptions import http_exception_handler
 from app.core.logger import setup_logging
 from app.core.response_middleware import StandardResponseMiddleware
-from app.config.config_manager import config_manager
+from app.core.validation_handler import validation_exception_handler
+from app.middleware.audit import AuditMiddleware
+from app.middleware.auth import AuthMiddleware
+from app.middleware.correlation_middleware import CorrelationIdMiddleware
 from app.router.sample_router import router as sample_router
 from app.router.user_router import router as user_router
-from app.core.exceptions import (
-    sqlalchemy_exception_handler,
-    generic_exception_handler,
-    http_exception_handler
-)
-from app.core.validation_handler import validation_exception_handler
-from app.config.redis_client import get_redis_client
 
 setup_logging()
-print ("App starting")
+print("App starting")
 
 
 @asynccontextmanager
@@ -33,21 +28,22 @@ async def lifespan(app: FastAPI):
 
     # Start listener
     listener_task = asyncio.create_task(
-        config_manager.start_listener()
+        config_manager.start_listener(),
     )
 
     yield
 
     listener_task.cancel()
 
+
 app = FastAPI(title="AWS Enterprise FastAPI Starter", lifespan=lifespan)
 
 
-#app.add_exception_handler(SQLAlchemyError, sqlalchemy_exception_handler)
-#app.add_exception_handler(Exception, generic_exception_handler)
+# app.add_exception_handler(SQLAlchemyError, sqlalchemy_exception_handler)
+# app.add_exception_handler(Exception, generic_exception_handler)
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
-#app.add_middleware(EncryptionMiddleware)
+# app.add_middleware(EncryptionMiddleware)
 app.add_middleware(CorrelationIdMiddleware)
 app.add_middleware(AuthMiddleware)
 # app.add_middleware(RateLimitMiddleware)

@@ -1,10 +1,15 @@
-from fastapi import Request, HTTPException
+from __future__ import annotations
+
+from datetime import datetime
+
+from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
+
+from app.core.error_builder import build_error_response
 from app.core.error_codes import ERROR_CODES
 from app.core.error_registry import ErrorCode
-from app.core.error_builder import build_error_response
-from datetime import datetime
+
 
 async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
     return JSONResponse(
@@ -25,6 +30,7 @@ async def generic_exception_handler(request: Request, exc: Exception):
         },
     )
 
+
 def error_response(code: str, request_id: str):
     return JSONResponse(
         status_code=400,
@@ -38,6 +44,7 @@ def error_response(code: str, request_id: str):
             },
         },
     )
+
 
 async def http_exception_handler(request: Request, exc: HTTPException):
     if exc.status_code == 409:

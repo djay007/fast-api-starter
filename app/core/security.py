@@ -1,5 +1,9 @@
-from jose import jwt, JWTError
+from __future__ import annotations
+
 from datetime import datetime, timedelta
+
+from jose import JWTError, jwt
+
 from app.config.config_manager import get_settings
 
 ALGORITHM = "HS256"
@@ -28,4 +32,4 @@ def verify_token(token: str) -> dict | None:
         )
         return payload
     except JWTError:
-        return None     
+        return None

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from datetime import datetime
 
@@ -21,10 +23,10 @@ class StandardResponseMiddleware:
             # Capture status & headers
             if message["type"] == "http.response.start":
                 status_code = message["status"]
-                headers = dict(
-                    (k.decode(), v.decode())
+                headers = {
+                    k.decode(): v.decode()
                     for k, v in message.get("headers", [])
-                )
+                }
                 return  # wait for body
 
             # Capture body
@@ -35,21 +37,25 @@ class StandardResponseMiddleware:
                     full_body = b"".join(body_chunks)
 
                     # CRITICAL FIX — DO NOT WRAP ERRORS
-                    print ("status code is", status_code)
+                    print("status code is", status_code)
                     if status_code >= 400:
-                        await send({
-                            "type": "http.response.start",
-                            "status": status_code,
-                            "headers": [
-                                (k.encode(), v.encode())
-                                for k, v in headers.items()
-                            ],
-                        })
-                        await send({
-                            "type": "http.response.body",
-                            "body": full_body,
-                            "more_body": False,
-                        })
+                        await send(
+                            {
+                                "type": "http.response.start",
+                                "status": status_code,
+                                "headers": [
+                                    (k.encode(), v.encode())
+                                    for k, v in headers.items()
+                                ],
+                            }
+                        )
+                        await send(
+                            {
+                                "type": "http.response.body",
+                                "body": full_body,
+                                "more_body": False,
+                            }
+                        )
                         return
 
                     # Only wrap successful JSON responses
@@ -65,8 +71,10 @@ class StandardResponseMiddleware:
                             ):
                                 wrapped = {
                                     "status": "success",
-                                    "request_id": scope.get("state", {}).get("request_id"),
-                                    "timestamp": datetime.utcnow().isoformat(),
+                                    "request_id": scope.get("state", {}).get(
+                                        "request_id"
+                                    ),
+                                    "timestamp": datetime.isoformat(),
                                     "data": payload,
                                 }
 
@@ -77,20 +85,24 @@ class StandardResponseMiddleware:
                             pass
 
                     # Send modified response
-                    await send({
-                        "type": "http.response.start",
-                        "status": status_code,
-                        "headers": [
-                            (k.encode(), v.encode())
-                            for k, v in headers.items()
-                        ],
-                    })
+                    await send(
+                        {
+                            "type": "http.response.start",
+                            "status": status_code,
+                            "headers": [
+                                (k.encode(), v.encode())
+                                for k, v in headers.items()
+                            ],
+                        }
+                    )
 
-                    await send({
-                        "type": "http.response.body",
-                        "body": full_body,
-                        "more_body": False,
-                    })
+                    await send(
+                        {
+                            "type": "http.response.body",
+                            "body": full_body,
+                            "more_body": False,
+                        }
+                    )
 
                 return
 

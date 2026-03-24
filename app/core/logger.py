@@ -1,8 +1,10 @@
-import logging
-import json
-from datetime import datetime
-from app.core.correlation import get_correlation_id
+from __future__ import annotations
 
+import json
+import logging
+from datetime import datetime
+
+from app.core.correlation import get_correlation_id
 
 SENSITIVE_FIELDS = {"password", "ssn", "credit_card", "token", "authorization"}
 
@@ -32,17 +34,18 @@ class JSONFormatter(logging.Formatter):
                 sanitized[key] = value
         return sanitized
 
+
 class CorrelationIdFilter(logging.Filter):
 
     def filter(self, record):
         record.request_id = get_correlation_id()
         return True
 
+
 def setup_logging():
     handler = logging.StreamHandler()
     handler.setFormatter(JSONFormatter())
     handler.addFilter(CorrelationIdFilter())
-
 
     app_logger = logging.getLogger("app")
     app_logger.setLevel(logging.INFO)

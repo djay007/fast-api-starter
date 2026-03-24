@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import uuid
-from starlette.middleware.base import BaseHTTPMiddleware
+
 from fastapi import Request
+from starlette.middleware.base import BaseHTTPMiddleware
+
 from app.core.correlation import set_correlation_id
 
 

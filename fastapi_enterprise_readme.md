@@ -117,6 +117,19 @@ pip install -r requirements.txt
 
 ---
 
+## Install Dependencies related to Precommit hook
+
+```
+pip install -r requirements-dev.txt
+pip install pre-commit
+pre-commit --version
+pre-commit clean
+pre-commit install
+pre-commit run --all-files
+```
+
+---
+
 ## Configure Environment Variables
 
 Create `.env`

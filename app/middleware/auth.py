@@ -1,9 +1,11 @@
-from starlette.middleware.base import BaseHTTPMiddleware
+from __future__ import annotations
+
 from fastapi.responses import JSONResponse
-from app.core.security import verify_token
+from starlette.middleware.base import BaseHTTPMiddleware
+
 from app.core.error_codes import ERROR_CODES
 from app.core.response import error_response
-
+from app.core.security import verify_token
 
 PUBLIC_ROUTES = {
     "/health",
@@ -18,8 +20,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         # import pdb; pdb.set_trace
         # Skip auth for public routes
-        print (request.url.path)
-        print (PUBLIC_ROUTES)
+        print(request.url.path)
+        print(PUBLIC_ROUTES)
         print("Request Path:", request.url.path)
         if request.url.path in PUBLIC_ROUTES:
             print("Public route condition is true")
@@ -32,7 +34,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if not token:
             return JSONResponse(
                 status_code=401,
-                content=error_response("AUTH_001", ERROR_CODES["AUTH_001"], "N/A"),
+                content=error_response(
+                    "AUTH_001",
+                    ERROR_CODES["AUTH_001"],
+                    "N/A",
+                ),
             )
 
         decoded = verify_token(token.replace("Bearer ", ""))
@@ -40,7 +46,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if not decoded:
             return JSONResponse(
                 status_code=401,
-                content=error_response("AUTH_002", ERROR_CODES["AUTH_001"], "N/A"),
+                content=error_response(
+                    "AUTH_002",
+                    ERROR_CODES["AUTH_001"],
+                    "N/A",
+                ),
             )
 
         return await call_next(request)

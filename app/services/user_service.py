@@ -1,7 +1,11 @@
-from app.repositories.user_repository import UserRepository
-from app.schemas.user_schema import UserCreateDTO
+from __future__ import annotations
+
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
+
+from app.repositories.user_repository import UserRepository
+
+
 class UserService:
 
     def __init__(self):
@@ -17,7 +21,7 @@ class UserService:
             if existing:
                 raise HTTPException(
                     status_code=409,
-                    detail="Email already exists"
+                    detail="Email already exists",
                 )
             user = await self.repository.create(
                 db,
@@ -29,10 +33,6 @@ class UserService:
             return user
         except IntegrityError:
             raise HTTPException(
-            status_code=409,
-            detail="Email already exists"
-        )
-    
-
-
-
+                status_code=409,
+                detail="Email already exists",
+            )

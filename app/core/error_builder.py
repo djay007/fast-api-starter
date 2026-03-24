@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 from datetime import datetime
+
 from fastapi.responses import JSONResponse
+
 from app.core.error_registry import ErrorCode
 
 

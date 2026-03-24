@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import asyncio
-from typing import Optional
 
 import redis.asyncio as redis
 
@@ -18,7 +19,7 @@ class AsyncConfigManager:
             decode_responses=True,
         )
 
-        self._settings: Optional[Settings] = None
+        self._settings: Settings | None = None
         self._reload_lock = asyncio.Lock()
 
     async def load_config(self):
@@ -32,7 +33,7 @@ class AsyncConfigManager:
 
         # Atomic pointer swap (lock-free read)
         self._settings = new_settings
-        print ("settings", self._settings)
+        print("settings", self._settings)
         print("[ConfigManager] Runtime config loaded")
 
     def get_settings(self) -> Settings:

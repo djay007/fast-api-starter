@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 ERROR_CODES = {
     "AUTHZ_001": "Access Denied",
     "VAL_001": "Validation Error",
@@ -6,5 +8,5 @@ ERROR_CODES = {
     "AUTH_001": "Invalid or missing token",
     "USER_001": "User not found",
     "USER_002": "Email already exists",
-    "DB_001": "Database error"
+    "DB_001": "Database error",
 }

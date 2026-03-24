@@ -1,6 +1,10 @@
-import boto3
+from __future__ import annotations
+
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+
+import boto3
+
 from app.config.config_manager import get_settings
 
 executor = ThreadPoolExecutor(max_workers=5)
@@ -52,5 +56,5 @@ async def save_audit_record(record: dict):
     loop = asyncio.get_running_loop()
     await loop.run_in_executor(
         executor,
-        lambda: table.put_item(Item=record)
+        lambda: table.put_item(Item=record),
     )

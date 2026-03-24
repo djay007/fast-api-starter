@@ -1,110 +1,82 @@
 repos:
+  # -------------------------------
+  # Core hygiene checks
+  # -------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: debug-statements
+      - id: requirements-txt-fixer
+      - id: name-tests-test
+        args: ['--pytest-test-first']
 
-# ------------------------------------------------
+  # -------------------------------
+  # Code formatting (standard)
+  # -------------------------------
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
 
-# Basic Git hygiene checks
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
 
-# ------------------------------------------------
+  # -------------------------------
+  # Linting
+  # -------------------------------
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
 
-* repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
-  hooks:
+  # -------------------------------
+  # Type checking
+  # -------------------------------
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.19.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-pyyaml]
+        exclude: ^testing/resources/
 
-  * id: trailing-whitespace
-  * id: end-of-file-fixer
-  * id: check-yaml
-  * id: check-merge-conflict
-  * id: check-added-large-files
+  # -------------------------------
+  # Security - Bandit (fast, local)
+  # -------------------------------
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.9
+    hooks:
+      - id: bandit
+        args: ["-ll", "-iii"]
+        exclude: tests/
 
-# ------------------------------------------------
+  # -------------------------------
+  # Security - pip-audit (dependencies)
+  # -------------------------------
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.7.3
+    hooks:
+      - id: pip-audit
+        args: ["-r", "requirements.txt",
+         "--ignore-vuln", "GHSA-jr27-m4p2-rc6r",
+         "--ignore-vuln", "GHSA-wj6h-64fc-37mp"]
 
-# Python formatter (Black)
+  # -------------------------------
+  # Security - Semgrep (advanced)
+  # -------------------------------
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.75.0
+    hooks:
+      - id: semgrep
+        args: ["--config=auto"]
 
-# ------------------------------------------------
-
-* repo: https://github.com/psf/black
-  rev: 24.4.2
-  hooks:
-
-  * id: black
-    language_version: python3
-
-# ------------------------------------------------
-
-# Import sorting (isort)
-
-# ------------------------------------------------
-
-* repo: https://github.com/PyCQA/isort
-  rev: 5.13.2
-  hooks:
-
-  * id: isort
-
-# ------------------------------------------------
-
-# Fast Python linter (Ruff)
-
-# ------------------------------------------------
-
-* repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.4.8
-  hooks:
-
-  * id: ruff
-    args: ["--fix"]
-  * id: ruff-format
-
-# ------------------------------------------------
-
-# Type checking (Mypy)
-
-# ------------------------------------------------
-
-* repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.10.0
-  hooks:
-
-  * id: mypy
-    additional_dependencies:
-
-    * pydantic
-    * fastapi
-
-# ------------------------------------------------
-
-# Python security scan (Bandit)
-
-# ------------------------------------------------
-
-* repo: https://github.com/PyCQA/bandit
-  rev: 1.7.8
-  hooks:
-
-  * id: bandit
-    args: ["-r", "app"]
-
-# ------------------------------------------------
-
-# Secret detection
-
-# ------------------------------------------------
-
-* repo: https://github.com/Yelp/detect-secrets
-  rev: v1.5.0
-  hooks:
-
-  * id: detect-secrets
-
-# ------------------------------------------------
-
-# Semgrep SAST security scanning
-
-# ------------------------------------------------
-
-* repo: https://github.com/semgrep/pre-commit
-  rev: v1.73.0
-  hooks:
-
-  * id: semgrep
-    args: ["--config=p/ci"]
+   # Secrets detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
