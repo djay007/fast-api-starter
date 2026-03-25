@@ -109,10 +109,13 @@ venv\Scripts\activate
 
 ---
 
-## Install Dependencies
+## Install Dependencies and Run application
 
 ```
 pip install -r requirements.txt
+chmod +x start.sh
+start.sh
+
 ```
 
 ---

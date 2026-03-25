@@ -1,59 +1,142 @@
-# Enterprise Ready FastAPI Starter
+# Developer Onboarding Guide
 
-## Features
-- Postgres Connectivity using sql-alchemy
-- Using valkey for configuation management
-- Real Encryption/Decryption Middleware (Fernet AES)
-- JWT Authentication/ Authorization Middleware
-- Redis-based Rate Limiting
-- Repositories: DB access only.
-  Services: Business rules.
-  Router: HTTP only.
-  Client → Router → Service → DB → Service → Router → Response
-- DynamoDB Audit Logging to store request and response (Large Response Offload to S3)
-- Pydantic Validation
-- Structured Logging with PII / Secret Redaction
-- Standardized Success/Error Responses
-- Enterprise grade folder structure
-- Ruff + Black + MyPy
-- Bandit, Safety, Semgrep
-- Production Dockerfile
+## Prerequisites
 
+Required tools:
 
-## Required Environment Variables
+| Tool | Version |
+|-----|--------|
+Python | 3.12+ |
+Docker | Latest |
+Git | Latest |
+Redis | 6+ |
+PostgreSQL | 13+ |
 
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
-export JWT_SECRET=your_secret
-export ENCRYPTION_KEY=your_fernet_key
-export DDB_TABLE=your_dynamodb_table
-export S3_BUCKET=your_bucket_name
+Check Python version:
 
-## Run
+```
+python --version
+```
 
+---
+
+## Clone Repository
+
+```
+git clone <repository-url>
+cd fastapi-enterprise
+```
+
+---
+
+## Create Virtual Environment
+
+```
+python -m venv venv
+```
+
+Activate environment
+
+Linux / Mac
+
+```
+source venv/bin/activate
+```
+
+Windows
+
+```
+venv\Scripts\activate
+```
+
+---
+
+## Install Dependencies and Run application
+
+```
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+chmod +x start.sh
+start.sh
 
-## Developer Guidelines
+```
 
-- Never hardcode credentials
-- Always use Pydantic schemas
-- Do not log sensitive fields
-- Add new error codes in error_codes.py
-- Follow structured logging
-- Write unit tests for new endpoints
+---
 
-## Test Coverage
+## Install Dependencies related to Precommit hook
 
-Run tests with coverage:
+```
+pip install -r requirements-dev.txt
+pip install pre-commit
+pre-commit --version
+pre-commit clean
+pre-commit install
+pre-commit run --all-files
+```
 
-    pytest
+---
 
-Coverage reports:
-- Terminal summary
-- HTML report generated in `htmlcov/`
+## Configure Environment Variables
 
-To open HTML report:
+Create `.env`
 
-    open htmlcov/index.html   # macOS
-    xdg-open htmlcov/index.html  # Linux
+Example:
+
+```
+APP_ENV=dev
+APP_NAME=fastapi-enterprise
+AWS_REGION=ap-south-1
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=sample
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+```
+
+---
+
+## 📁 Project Structure
+
+. ├── app/ ├── Dockerfile ├── docker-compose.yml ├── requirements.txt
+├── start.sh ├── .env └── README.md
+
+
+## 🐳 Run
+
+docker compose up -d --build
+
+## 🛑 Stop
+
+docker compose down
+
+## 🔄 Rebuild
+
+docker compose build --no-cache
+
+
+## Rebuild and Restart
+
+docker compose down
+docker compose build
+docker compose up -d
+
+
+## Remove old Container
+
+docker ps -a
+docker rm -f <container_id>
+
+## Useful Debug Commands
+
+docker exec -it <container_id> sh
+
+## Check environment variables:
+
+docker exec -it <container_id> env
+
+## 🌐 Access
+
+http://localhost:8000/health

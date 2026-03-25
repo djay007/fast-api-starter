@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: fastapi_app
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+    # Optional but recommended
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
